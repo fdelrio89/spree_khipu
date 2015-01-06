@@ -74,7 +74,7 @@ module Spree
         notify_url:     khipu_notify_url, 
         return_url:     khipu_success_url(payment.identifier), 
         cancel_url:     khipu_cancel_url(payment.identifier), 
-        picture_url:    Rails.env.production? ? view_context.image_url('Logo Reu blanco.png') : ""
+        picture_url:    "" # Rails.env.production? ? view_context.image_url('Logo Reu blanco.png') : ""
       }
     end
     
