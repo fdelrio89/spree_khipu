@@ -1,5 +1,4 @@
 SpreeKhipu
-==========
 
 Introduction goes here.
 
@@ -36,4 +35,4 @@ Simply add this require statement to your spec_helper:
 require 'spree_khipu/factories'
 ```
 
-Copyright (c) 2014 [name of extension creator], released under the New BSD License
+
