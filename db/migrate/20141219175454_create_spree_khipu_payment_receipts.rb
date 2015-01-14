@@ -1,4 +1,4 @@
-class CreateKhipuPaymentReceipts < ActiveRecord::Migration
+class CreateSpreeKhipuPaymentReceipts < ActiveRecord::Migration
   def change
     create_table :spree_khipu_payment_receipts do |t|
       t.string :api_version
