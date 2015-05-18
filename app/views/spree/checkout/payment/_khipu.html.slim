@@ -1,7 +1,13 @@
-/ = link_to khipu_url(:payment_method_id => payment_method.id), :method => :post, :id => "khipu_button" do
-/   img src="https://s3.amazonaws.com/static.khipu.com/buttons/2014/50x25-purple.png"
-= link_to khipu_url(:payment_method_id => payment_method.id), :method => :post, :id => "khipu_button" do
-  = image_tag "boton-khipu.png"
+.khipu-box
+  = link_to khipu_url(:payment_method_id => payment_method.id), :method => :post, :id => "khipu_button" do
+    = image_tag "boton-khipu.png"
+
+  .row
+    .large-12.columns
+      .right.well.text-right.form-buttons data-hook="buttons"
+        = link_to Spree.t(:continue_with_symbol), khipu_url(:payment_method_id => payment_method.id), method: :post, class: 'btn btn-lg btn-success primary call-to-action khipu'
+        javascript:
+          Spree.disableSaveOnClick();
 
 javascript:
   SpreeKhipu.paymentMethodID = "#{payment_method.id}"
