@@ -5,7 +5,7 @@
   .row
     .large-12.columns
       .right.well.text-right.form-buttons data-hook="buttons"
-        = link_to Spree.t(:continue_with_symbol), khipu_url(:payment_method_id => payment_method.id), method: :post, class: 'btn btn-lg btn-success primary call-to-action khipu'
+        = link_to Spree.t(:finalize_order), khipu_url(:payment_method_id => payment_method.id), method: :post, class: 'btn btn-lg btn-success primary call-to-action khipu'
         javascript:
           Spree.disableSaveOnClick();
 
