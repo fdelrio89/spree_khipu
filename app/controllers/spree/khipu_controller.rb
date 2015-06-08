@@ -49,8 +49,7 @@ module Spree
 
     def notify
       begin
-        notification_params = params.extract!(:notification_token)
-        map = provider.get_payment_notification(notification_params)
+        map = provider.get_payment_notification(params)
 
         # Aceptar el pago
         @payment = Spree::Payment.where(identifier: map[:transaction_id]).last
