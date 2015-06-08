@@ -119,7 +119,7 @@ module Spree
     end
 
     def payment_method
-      Spree::PaymentMethod.find(params[:payment_method_id]) || Spree::Payment.where(identifier: khipu_params[:transaction_id]).last.payment_method
+      Spree::PaymentMethod.find(params[:payment_method_id]) || Spree::Payment.where(identifier: khipu_params[:transaction_id]).last.payment_method || Spree::PaymentMethod.where(type: "Spree::Gateway::KhipuGateway").last
     end
 
     def provider
