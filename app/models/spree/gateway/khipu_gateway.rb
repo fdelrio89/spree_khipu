@@ -45,4 +45,10 @@ class Spree::Gateway::KhipuGateway < Spree::Gateway
   def authorize(money, creditcard, gateway_options)
     provider.authorize(money * 100, creditcard, gateway_options)
   end
+
+  def modify_url_by_payment_type(url)
+    return url if not ["manual", "simplified"].include? preferred_payment_type
+
+    url.sub! "/payment/show/", "/payment/#{preferred_payment_type}/"
+  end
 end
