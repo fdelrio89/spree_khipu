@@ -3,11 +3,12 @@ class Spree::Gateway::KhipuGateway < Spree::Gateway
 
   preference :commerce_id, :string
   preference :khipu_key, :string
-  
+  preference :payment_type, :string
+
   def actions
     %w{capture void}
   end
-  
+
   # Indicates whether its possible to capture the payment
   def can_capture?(payment)
     ['checkout', 'pending'].include?(payment.state)
@@ -16,7 +17,7 @@ class Spree::Gateway::KhipuGateway < Spree::Gateway
   def provider
     Khipu.create_khipu_api(preferred_commerce_id, preferred_khipu_key)
   end
-  
+
   def capture(*args)
     ActiveMerchant::Billing::Response.new(true, "", {}, {})
   end
@@ -24,11 +25,11 @@ class Spree::Gateway::KhipuGateway < Spree::Gateway
   def auto_capture?
     true
   end
-  
+
   def source_required?
     false
   end
-  
+
   def supports?(source)
     true
   end
