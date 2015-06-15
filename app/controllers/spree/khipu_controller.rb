@@ -48,19 +48,29 @@ module Spree
     end
 
     def notify
-      render nothing: true, status: :forbidden and return unless validate_payment(params)
+      begin
+        notification_params = params.extract!(:notification_token)
+        map = provider.get_payment_notification(notification_params)
 
-      @payment = Spree::Payment.where(identifier: khipu_params[:transaction_id]).last
+        # Aceptar el pago
+        @payment = Spree::Payment.where(identifier: map[:transaction_id]).last
 
-      render  nothing: true, status: :ok and return if @payment.order.payment_state == 'paid'
+        render  nothing: true, status: :ok and return if @payment.order.payment_state == 'paid'
 
-      @khipu_receipt = Spree::KhipuPaymentReceipt.where(transaction_id: @payment.identifier).last
-      @khipu_receipt.update(khipu_params)
-      @khipu_receipt.save!
+        @khipu_receipt = Spree::KhipuPaymentReceipt.where(transaction_id: @payment.identifier).last
+        @khipu_receipt.update(map)
+        @khipu_receipt.save!
 
-      @payment.order.payment_state = 'paid'
+        @payment.order.payment_state = 'paid'
+        @payment.save!
 
-      render  nothing: true, status: :ok
+        render  nothing: true, status: :ok
+
+      rescue Khipu::ApiError => error
+        logger.error error.type
+        logger.error error.message
+        render  nothing: true, status: :internal_server_error
+      end
     end
 
     private
