@@ -57,7 +57,7 @@ module Spree
         render  nothing: true, status: :ok and return if @payment.order.payment_state == 'paid'
 
         @khipu_receipt = Spree::KhipuPaymentReceipt.where(transaction_id: @payment.identifier).last
-        @khipu_receipt.update(map)
+        @khipu_receipt.update(map.select{ |k,v| @khipu_receipt.attributes.keys.include? k })
         @khipu_receipt.save!
 
         @payment.order.payment_state = 'paid'
