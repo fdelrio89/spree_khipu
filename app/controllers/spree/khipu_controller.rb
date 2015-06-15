@@ -52,7 +52,7 @@ module Spree
         map = provider.get_payment_notification(params)
 
         # Aceptar el pago
-        @payment = Spree::Payment.where(identifier: map[:transaction_id]).last
+        @payment = Spree::Payment.where(identifier: map["transaction_id"]).last
 
         render  nothing: true, status: :ok and return if @payment.order.payment_state == 'paid'
 
