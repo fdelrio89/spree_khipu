@@ -61,7 +61,7 @@ module Spree
         @khipu_receipt.save!
 
         @payment.order.payment_state = 'paid'
-        @payment.save!
+        @payment.order.save!
 
         render  nothing: true, status: :ok
 
