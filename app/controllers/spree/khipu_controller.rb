@@ -48,19 +48,28 @@ module Spree
     end
 
     def notify
-      render nothing: true, status: :forbidden and return unless validate_payment(params)
+      begin
+        map = provider.get_payment_notification(params)
 
-      @payment = Spree::Payment.where(identifier: khipu_params[:transaction_id]).last
+        # Aceptar el pago
+        @payment = Spree::Payment.where(identifier: map["transaction_id"]).last
 
-      render  nothing: true, status: :ok and return if @payment.order.payment_state == 'paid'
+        render  nothing: true, status: :ok and return if @payment.order.payment_state == 'paid'
 
-      @khipu_receipt = Spree::KhipuPaymentReceipt.where(transaction_id: @payment.identifier).last
-      @khipu_receipt.update(khipu_params)
-      @khipu_receipt.save!
+        @khipu_receipt = Spree::KhipuPaymentReceipt.where(transaction_id: @payment.identifier).last
+        @khipu_receipt.update(map.select{ |k,v| @khipu_receipt.attributes.keys.include? k })
+        @khipu_receipt.save!
 
-      @payment.order.payment_state = 'paid'
+        @payment.order.payment_state = 'paid'
+        @payment.order.save!
 
-      render  nothing: true, status: :ok
+        render  nothing: true, status: :ok
+
+      rescue Khipu::ApiError => error
+        logger.error error.type
+        logger.error error.message
+        render  nothing: true, status: :internal_server_error
+      end
     end
 
     private
@@ -109,7 +118,7 @@ module Spree
     end
 
     def payment_method
-      Spree::PaymentMethod.find(params[:payment_method_id]) || Spree::Payment.where(identifier: khipu_params[:transaction_id]).last.payment_method
+      params[:payment_method_id] ? (Spree::PaymentMethod.find(params[:payment_method_id]) || Spree::Payment.where(identifier: khipu_params[:transaction_id]).last.payment_method) : Spree::PaymentMethod.where(type: "Spree::Gateway::KhipuGateway").last
     end
 
     def provider
