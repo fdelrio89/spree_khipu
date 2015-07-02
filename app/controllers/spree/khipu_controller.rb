@@ -60,8 +60,7 @@ module Spree
         @khipu_receipt.update(map.select{ |k,v| @khipu_receipt.attributes.keys.include? k })
         @khipu_receipt.save!
 
-        @payment.order.payment_state = 'paid'
-        @payment.order.save!
+        @payment.capture!
 
         render  nothing: true, status: :ok
 
