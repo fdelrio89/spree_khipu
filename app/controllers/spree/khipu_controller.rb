@@ -60,8 +60,7 @@ module Spree
         @khipu_receipt.update(map.select{ |k,v| @khipu_receipt.attributes.keys.include? k })
         @khipu_receipt.save!
 
-        @payment.order.payment_state = 'paid'
-        @payment.order.save!
+        @payment.capture!
 
         render  nothing: true, status: :ok
 
@@ -77,7 +76,7 @@ module Spree
     def payment_args(payment)
       {
         receiver_id:    payment_method.preferences[:commerce_id],
-        subject:        'Compra en REU Outdoor.',
+        subject:        payment_method.preferences[:subject],
         body:           "",
         amount:         payment.amount.to_i,
         payer_email:    payment.order.email,
