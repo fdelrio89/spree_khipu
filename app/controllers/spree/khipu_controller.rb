@@ -76,7 +76,7 @@ module Spree
     def payment_args(payment)
       {
         receiver_id:    payment_method.preferences[:commerce_id],
-        subject:        'Compra en REU Outdoor.',
+        subject:        payment_method.preferences[:subject],
         body:           "",
         amount:         payment.amount.to_i,
         payer_email:    payment.order.email,

@@ -4,6 +4,7 @@ class Spree::Gateway::KhipuGateway < Spree::Gateway
   preference :commerce_id, :string
   preference :khipu_key, :string
   preference :payment_type, :string
+  preference :subject, :string
 
   def actions
     %w{capture void}
