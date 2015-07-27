@@ -20,10 +20,6 @@ module Spree
         map = provider.create_payment_url(payment_args(@payment))
         khipu_payment_url = payment_method.modify_url_by_payment_type(map['url'])
         redirect_to khipu_payment_url
-
-      rescue Khipu::ApiError => error
-        flash[:error] = 'Hubo un problema con Khipu, intente nuevamente más tarde.'
-        redirect_to checkout_state_path(:payment) and return
       end
     end
 
